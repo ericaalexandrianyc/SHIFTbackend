@@ -34,8 +34,7 @@ app.post('/api/athena', async (req, res) => {
     res.json(response.data);
   } catch (error) {
     console.error('Athena error:', error.message);
-    res.status(500).json({ error: 'Athena is unavailable right now.' });
-  }
+console.error('Athena error details:', JSON.stringify(error.response?.data));
 });
 
 // ━━━ VOICE — ELEVENLABS API ━━━
