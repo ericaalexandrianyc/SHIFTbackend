@@ -43,7 +43,30 @@ app.post('/api/athena', async (req, res) => {
     res.status(500).json({ error: 'Athena is unavailable right now.' });
   }
 });
-
+app.get('/api/voice-stream', async (req, res) => {
+  try {
+    const text = req.query.text || '';
+    const response = await axios({
+      method: 'post',
+      url: `https://api.elevenlabs.io/v1/text-to-speech/${ELEVEN_VOICE}`,
+      headers: {
+        'Content-Type': 'application/json',
+        'xi-api-key': ELEVEN_KEY,
+      },
+      data: {
+        text: text.substring(0, 400),
+        model_id: 'eleven_monolingual_v1',
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+      },
+      responseType: 'arraybuffer',
+    });
+    res.set('Content-Type', 'audio/mpeg');
+    res.send(response.data);
+  } catch (error) {
+    console.error('Voice stream error:', error.message);
+    res.status(500).json({ error: 'Voice unavailable.' });
+  }
+});
 app.post('/api/voice', async (req, res) => {
   try {
     const { text } = req.body;
