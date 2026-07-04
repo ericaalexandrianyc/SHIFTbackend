@@ -12,7 +12,12 @@ const ELEVEN_VOICE = process.env.ELEVEN_VOICE;
 const DID_KEY = process.env.DID_KEY;
 
 app.get('/', (req, res) => {
-  res.json({ status: 'SHIFT Backend is running', athena: 'ready' });
+  res.json({
+    status: 'SHIFT Backend is running',
+    athena: 'ready',
+    elevenKeyStart: ELEVEN_KEY ? ELEVEN_KEY.substring(0, 8) : 'MISSING',
+    elevenKeyLength: ELEVEN_KEY ? ELEVEN_KEY.length : 0,
+  });
 });
 
 app.post('/api/athena', async (req, res) => {
